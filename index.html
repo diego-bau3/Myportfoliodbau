@@ -1,0 +1,29 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="styles.css"><title>Diego Bau</title></head><body><main class="landing-page"><section class="hero-section"><div class="hero-lockup"><div class="hero-primary"><h1 class="hero-name">DIEGO</h1><h2 class="hero-surname">Bautista Silva</h2><p class="hero-discipline">Mechanical Engineering | Aeronautics Concentration</p></div></div></section><section class="projects-section" id="projects"><div class="projects-strip"><article class="project-item"><div class="project-copy"><h3 class="project-title">CNC Lathe from Scratch</h3><p class="project-note">Built and tested a custom CNC lathe for Ball Joint production, combining mechanical design, manufacturing, electronics, machining validation, quality control, and data-driven process analysis.</p></div><img src="assets/cnc-lathe.webp" alt="CNC Lathe from Scratch" class="project-image"></article><article class="project-item"><div class="project-copy"><h3 class="project-title">Combustion-Powered RC Aircraft</h3><p class="project-note">A full combustion-powered scale aircraft inspired by the Messerschmitt Bf 109. This project brought together CAD design, manufacturing, aerodynamics, electronics, engine testing, and full aircraft assembly.</p></div><img src="assets/rc-aircraft-cutout.webp" alt="Combustion-Powered RC Aircraft" class="project-image"></article><article class="project-item"><div class="project-copy"><h3 class="project-title">Custom Brushless Motor Car</h3><p class="project-note">A handmade brushless motor car built from scratch, combining electromagnetism, Fusion 360 design, 3D printing, battery testing, and drivetrain optimization to complete a one-meter speed challenge.</p></div><img src="assets/brushless-motor-car.webp" alt="Custom Brushless Motor Car" class="project-image"></article><article class="project-item"><div class="project-copy"><h3 class="project-title">Wearable Data Collector for Robotics</h3><p class="project-note">Built from scratch with a Raspberry Pi Zero 2, this wearable headband captures first-person video to create datasets for robotics model training. A compact project where hardware, computer vision, and robotics meet.</p></div><img src="assets/wearable-collector.webp" alt="Wearable Data Collector for Robotics" class="project-image"></article><article class="project-item"><div class="project-copy"><h3 class="project-title">SO-101 Robotic Arm Learning System</h3><p class="project-note">A hands-on SO-101 robotic arm project focused on teleoperation, simulation, dataset collection, and robot learning. I built a custom simulator, control scripts, recording tools, and LeRobot-compatible workflows to train and test robotic behaviors.</p></div><img src="assets/so101-robotic-arm.webp" alt="SO-101 Robotic Arm Learning System" class="project-image"></article></div></section><img src="assets/scroll-car.webp" alt="" class="scroll-car"></main>
+<script>
+const heroLockup = document.querySelector(".hero-lockup");
+const heroPrimary = document.querySelector(".hero-primary");
+const projectsStrip = document.querySelector(".projects-strip");
+const scrollCar = document.querySelector(".scroll-car");
+
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function updateScrollScene() {
+  const progress = clamp(window.scrollY / (window.innerHeight * 0.55), 0, 1);
+  const pageProgress = clamp(window.scrollY / (document.documentElement.scrollHeight - window.innerHeight), 0, 1);
+  const primaryFade = 1 - progress;
+  heroPrimary.style.opacity = primaryFade.toFixed(3);
+  heroPrimary.style.transform = `translateY(-${progress * 210}px)`;
+  heroLockup.style.pointerEvents = progress > 0.96 ? "none" : "auto";
+  projectsStrip.style.opacity = clamp(progress * 1.15, 0.18, 1).toFixed(3);
+  projectsStrip.style.transform = `translateY(${(1 - progress) * 90}px)`;
+  scrollCar.style.transform = `translateY(${pageProgress * 72}vh) rotate(-90deg)`;
+  scrollCar.style.opacity = clamp(0.18 + pageProgress * 0.82, 0.18, 1).toFixed(3);
+}
+
+window.addEventListener("scroll", updateScrollScene, { passive: true });
+window.addEventListener("resize", updateScrollScene);
+updateScrollScene();
+</script>
+</body></html>
