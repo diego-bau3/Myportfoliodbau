@@ -1,29 +1,182 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="styles.css"><title>Diego Bau</title></head><body><main class="landing-page"><section class="hero-section"><div class="hero-lockup"><div class="hero-primary"><h1 class="hero-name">DIEGO</h1><h2 class="hero-surname">Bautista Silva</h2><p class="hero-discipline">Mechanical Engineering | Aeronautics Concentration</p></div></div></section><section class="projects-section" id="projects"><div class="projects-strip"><article class="project-item"><div class="project-copy"><h3 class="project-title">CNC Lathe from Scratch</h3><p class="project-note">Built and tested a custom CNC lathe for Ball Joint production, combining mechanical design, manufacturing, electronics, machining validation, quality control, and data-driven process analysis.</p></div><img src="assets/cnc-lathe.webp" alt="CNC Lathe from Scratch" class="project-image"></article><article class="project-item"><div class="project-copy"><h3 class="project-title">Combustion-Powered RC Aircraft</h3><p class="project-note">A full combustion-powered scale aircraft inspired by the Messerschmitt Bf 109. This project brought together CAD design, manufacturing, aerodynamics, electronics, engine testing, and full aircraft assembly.</p></div><img src="assets/rc-aircraft-cutout.webp" alt="Combustion-Powered RC Aircraft" class="project-image"></article><article class="project-item"><div class="project-copy"><h3 class="project-title">Custom Brushless Motor Car</h3><p class="project-note">A handmade brushless motor car built from scratch, combining electromagnetism, Fusion 360 design, 3D printing, battery testing, and drivetrain optimization to complete a one-meter speed challenge.</p></div><img src="assets/brushless-motor-car.webp" alt="Custom Brushless Motor Car" class="project-image"></article><article class="project-item"><div class="project-copy"><h3 class="project-title">Wearable Data Collector for Robotics</h3><p class="project-note">Built from scratch with a Raspberry Pi Zero 2, this wearable headband captures first-person video to create datasets for robotics model training. A compact project where hardware, computer vision, and robotics meet.</p></div><img src="assets/wearable-collector.webp" alt="Wearable Data Collector for Robotics" class="project-image"></article><article class="project-item"><div class="project-copy"><h3 class="project-title">SO-101 Robotic Arm Learning System</h3><p class="project-note">A hands-on SO-101 robotic arm project focused on teleoperation, simulation, dataset collection, and robot learning. I built a custom simulator, control scripts, recording tools, and LeRobot-compatible workflows to train and test robotic behaviors.</p></div><img src="assets/so101-robotic-arm.webp" alt="SO-101 Robotic Arm Learning System" class="project-image"></article></div></section><img src="assets/scroll-car.webp" alt="" class="scroll-car"></main>
-<script>
-const heroLockup = document.querySelector(".hero-lockup");
-const heroPrimary = document.querySelector(".hero-primary");
-const projectsStrip = document.querySelector(".projects-strip");
-const scrollCar = document.querySelector(".scroll-car");
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+  <title>Diego Bau</title>
+</head>
+<body>
+  <main class="landing-page">
+    <section class="hero-section">
+      <div class="hero-lockup">
+        <div class="hero-primary">
+          <h1 class="hero-name">DIEGO</h1>
+          <h2 class="hero-surname">Bautista Silva</h2>
+          <p class="hero-discipline">Mechanical Engineering | Aeronautics Concentration</p>
+        </div>
+      </div>
+    </section>
 
-function clamp(value, min, max) {
-  return Math.min(Math.max(value, min), max);
-}
+    <section class="projects-section" id="projects">
+      <div class="projects-strip">
+        <button class="project-item" type="button" data-project="cnc" aria-label="Open Custom In-House CNC Lathe details">
+          <span class="project-copy">
+            <span class="project-title">CNC Lathe from Scratch</span>
+            <span class="project-note">Built and tested a custom CNC lathe for Ball Joint production, combining mechanical design, manufacturing, electronics, machining validation, quality control, and data-driven process analysis.</span>
+          </span>
+          <img src="assets/cnc-lathe.webp" alt="CNC Lathe from Scratch" class="project-image">
+        </button>
 
-function updateScrollScene() {
-  const progress = clamp(window.scrollY / (window.innerHeight * 0.55), 0, 1);
-  const pageProgress = clamp(window.scrollY / (document.documentElement.scrollHeight - window.innerHeight), 0, 1);
-  const primaryFade = 1 - progress;
-  heroPrimary.style.opacity = primaryFade.toFixed(3);
-  heroPrimary.style.transform = `translateY(-${progress * 210}px)`;
-  heroLockup.style.pointerEvents = progress > 0.96 ? "none" : "auto";
-  projectsStrip.style.opacity = clamp(progress * 1.15, 0.18, 1).toFixed(3);
-  projectsStrip.style.transform = `translateY(${(1 - progress) * 90}px)`;
-  scrollCar.style.transform = `translateY(${pageProgress * 72}vh) rotate(-90deg)`;
-  scrollCar.style.opacity = clamp(0.18 + pageProgress * 0.82, 0.18, 1).toFixed(3);
-}
+        <button class="project-item" type="button" data-project="aircraft" aria-label="Open Combustion-Powered RC Aircraft details">
+          <span class="project-copy">
+            <span class="project-title">Combustion-Powered RC Aircraft</span>
+            <span class="project-note">A full combustion-powered scale aircraft inspired by the Messerschmitt Bf 109. This project brought together CAD design, manufacturing, aerodynamics, electronics, engine testing, and full aircraft assembly.</span>
+          </span>
+          <img src="assets/rc-aircraft-cutout.webp" alt="Combustion-Powered RC Aircraft" class="project-image">
+        </button>
 
-window.addEventListener("scroll", updateScrollScene, { passive: true });
-window.addEventListener("resize", updateScrollScene);
-updateScrollScene();
-</script>
-</body></html>
+        <button class="project-item" type="button" data-project="car" aria-label="Open Custom Brushless Motor Car details">
+          <span class="project-copy">
+            <span class="project-title">Custom Brushless Motor Car</span>
+            <span class="project-note">A handmade brushless motor car built from scratch, combining electromagnetism, Fusion 360 design, 3D printing, battery testing, and drivetrain optimization to complete a one-meter speed challenge.</span>
+          </span>
+          <img src="assets/brushless-motor-car.webp" alt="Custom Brushless Motor Car" class="project-image">
+        </button>
+
+        <button class="project-item" type="button" data-project="wearable" aria-label="Open Wearable Data Collector for Robotics details">
+          <span class="project-copy">
+            <span class="project-title">Wearable Data Collector for Robotics</span>
+            <span class="project-note">Built from scratch with a Raspberry Pi Zero 2, this wearable headband captures first-person video to create datasets for robotics model training. A compact project where hardware, computer vision, and robotics meet.</span>
+          </span>
+          <img src="assets/wearable-collector.webp" alt="Wearable Data Collector for Robotics" class="project-image">
+        </button>
+
+        <button class="project-item" type="button" data-project="so101" aria-label="Open SO-101 Robotic Arm System details">
+          <span class="project-copy">
+            <span class="project-title">SO-101 Robotic Arm Learning System</span>
+            <span class="project-note">A hands-on SO-101 robotic arm project focused on teleoperation, simulation, dataset collection, and robot learning. I built a custom simulator, control scripts, recording tools, and LeRobot-compatible workflows to train and test robotic behaviors.</span>
+          </span>
+          <img src="assets/so101-robotic-arm.webp" alt="SO-101 Robotic Arm Learning System" class="project-image">
+        </button>
+      </div>
+    </section>
+
+    <section class="project-detail" aria-hidden="true">
+      <button class="project-detail-close" type="button" aria-label="Close project details">Close</button>
+      <div class="project-detail-inner">
+        <p class="project-detail-kicker">Project detail</p>
+        <h2 class="project-detail-title"></h2>
+        <div class="project-detail-copy"></div>
+      </div>
+    </section>
+
+    <img src="assets/scroll-car.webp" alt="" class="scroll-car">
+  </main>
+
+  <script>
+    const heroLockup = document.querySelector(".hero-lockup");
+    const heroPrimary = document.querySelector(".hero-primary");
+    const projectsStrip = document.querySelector(".projects-strip");
+    const scrollCar = document.querySelector(".scroll-car");
+    const projectButtons = document.querySelectorAll(".project-item");
+    const projectDetail = document.querySelector(".project-detail");
+    const detailTitle = document.querySelector(".project-detail-title");
+    const detailCopy = document.querySelector(".project-detail-copy");
+    const detailClose = document.querySelector(".project-detail-close");
+
+    const projectDetails = {
+      wearable: {
+        title: "Wearable Data Collector for Robotics",
+        paragraphs: [
+          "I built a wearable vision system using a Raspberry Pi Zero 2 to capture first-person demonstrations for robotics training. The goal was to create a compact data-collection device that could record human actions from a perspective that is actually useful for learning manipulation, motion, and task context.",
+          "The real challenge was making the system reliable while worn. I had to deal with heat dissipation for the Raspberry Pi, stable recording without FPS drops, easy connection and setup, adjustable camera angle, and a Velcro-based head fit that stayed secure during movement. I also designed a data interface to review, organize, and work with the captured videos more efficiently.",
+          "This project pushed me to think about robotics from the data side: what the model sees, what it misses, and how hardware design, comfort, thermal behavior, camera placement, and data organization can directly affect the quality of robot learning."
+        ]
+      },
+      so101: {
+        title: "SO-101 Robotic Arm System",
+        paragraphs: [
+          "I built a full SO-101 robotic arm workflow for teleoperation, simulation, dataset collection, and robot learning. The system includes leader-follower control, motion recording, playback tools, multi-camera capture, LeRobot-compatible datasets, and a custom simulator I built to test and visualize movements.",
+          "The real challenge was making all the pieces work together smoothly. I had to handle low-latency communication between the leader and follower arms, camera synchronization, clean dataset structure, recorded motion playback, and the connection between simulation and the physical robot. I also worked with multiple task datasets, including object-to-cup and object-to-basket movements, using both top-view and gripper-view cameras.",
+          "This project is one of my strongest robotics builds because it covers the full loop: control the robot, collect demonstrations, train from data, test the behavior, and improve the system. It is not just a robot arm moving around; it is a complete workflow for teaching a robot through real examples."
+        ]
+      },
+      aircraft: {
+        title: "Combustion-Powered RC Aircraft",
+        paragraphs: [
+          "I worked on the full build of a combustion-powered RC aircraft inspired by the Messerschmitt Bf 109. The project covered the complete aircraft: fuselage, wings, empennage, landing gear, combustion engine, propeller, control surfaces, electronics, assembly, and testing.",
+          "The challenge was making the aircraft behave as one system. Weight, structure, aerodynamics, engine power, control surfaces, material choice, and manufacturability all affected each other. We worked through CAD design, structural analysis, aerodynamic considerations, material selection, engine testing, propeller selection, electronics integration, and physical assembly.",
+          "This project taught me how much precision goes into making an aircraft work. It was not only about building something that looked like a plane, but about understanding how every decision affects stability, control, strength, and performance."
+        ]
+      },
+      cnc: {
+        title: "Custom In-House CNC Lathe",
+        paragraphs: [
+          "I worked on a custom in-house CNC lathe built for Ball Joint production. The project combined mechanical design, manufacturing, electronics, machining tests, quality control, and process validation.",
+          "The challenge was proving that the machine could do more than move. It had to be evaluated as a manufacturing system: stiffness, vibration, alignment, dimensional accuracy, repeatability, measurement quality, and cost all mattered. We worked with SPC, Gage R&R, APQP, FMEA, process capability, and cost analysis to compare the in-house lathe against a professional CNC setup.",
+          "This project connected the physical side of manufacturing with the data side of decision-making. It was about building a machine, testing its limits, and understanding whether it could realistically produce parts with the quality and consistency required."
+        ]
+      },
+      car: {
+        title: "Custom Brushless Motor Car",
+        paragraphs: [
+          "I built a small car powered by a handmade brushless motor, designed to complete a one-meter speed challenge. The project combined electromagnetism, coil winding, Fusion 360 design, 3D printing, battery setup, wheel traction, and drivetrain tuning.",
+          "The challenge was turning electromagnetic force into actual speed. We had to tune the motor winding, coil count, battery configuration, chassis weight, wheel grip, and power transfer so the car could move efficiently instead of wasting energy through friction, slipping, or excess mass. We also changed materials and reduced weight after realizing the original aluminum components were too heavy.",
+          "This project was about making the whole system work together. The motor, chassis, wheels, batteries, and drivetrain all had to be tuned as one machine to get real performance."
+        ]
+      }
+    };
+
+    function clamp(value, min, max) {
+      return Math.min(Math.max(value, min), max);
+    }
+
+    function updateScrollScene() {
+      const progress = clamp(window.scrollY / (window.innerHeight * 0.55), 0, 1);
+      const pageProgress = clamp(window.scrollY / (document.documentElement.scrollHeight - window.innerHeight), 0, 1);
+      const primaryFade = 1 - progress;
+      heroPrimary.style.opacity = primaryFade.toFixed(3);
+      heroPrimary.style.transform = `translateY(-${progress * 210}px)`;
+      heroLockup.style.pointerEvents = progress > 0.96 ? "none" : "auto";
+      projectsStrip.style.opacity = clamp(progress * 1.15, 0.18, 1).toFixed(3);
+      projectsStrip.style.transform = `translateY(${(1 - progress) * 90}px)`;
+      scrollCar.style.transform = `translateY(${pageProgress * 72}vh) rotate(-90deg)`;
+      scrollCar.style.opacity = clamp(0.18 + pageProgress * 0.82, 0.18, 1).toFixed(3);
+    }
+
+    function openProject(projectKey) {
+      const detail = projectDetails[projectKey];
+      if (!detail) return;
+
+      detailTitle.textContent = detail.title;
+      detailCopy.innerHTML = detail.paragraphs.map((paragraph) => `<p>${paragraph}</p>`).join("");
+      document.body.classList.add("detail-open");
+      projectDetail.setAttribute("aria-hidden", "false");
+      detailClose.focus({ preventScroll: true });
+    }
+
+    function closeProject() {
+      document.body.classList.remove("detail-open");
+      projectDetail.setAttribute("aria-hidden", "true");
+    }
+
+    projectButtons.forEach((button) => {
+      button.addEventListener("click", () => openProject(button.dataset.project));
+    });
+
+    detailClose.addEventListener("click", closeProject);
+    projectDetail.addEventListener("click", (event) => {
+      if (event.target === projectDetail) closeProject();
+    });
+
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeProject();
+    });
+
+    window.addEventListener("scroll", updateScrollScene, { passive: true });
+    window.addEventListener("resize", updateScrollScene);
+    updateScrollScene();
+  </script>
+</body>
+</html>
