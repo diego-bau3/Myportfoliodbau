@@ -1,0 +1,514 @@
+
+:root {
+  --page-background: #FBF9ED;
+  --text: #181713;
+  --muted-text: #686458;
+  /* Muted brick — same warmth as the old #CD2B29 but far less shouty. */
+  --accent: #A24936;
+  /* One family for the whole hero; SF Pro and Helvetica Neue both carry real
+     weights from 200 to 900, so the bold/thin contrast is genuine. */
+  --display-font: -apple-system, "SF Pro Display", "Helvetica Neue", system-ui,
+    sans-serif;
+  /* Distance from the viewport edge for the fixed top-corner controls. */
+  --edge-inset: clamp(20px, 4vw, 52px);
+  /* How far the detail close button clears the language toggle above it. */
+  --close-offset: clamp(70px, 9vw, 116px);
+  /* Every project image gets this exact box, whatever its layout. */
+  --project-image-width: clamp(260px, 40vw, 560px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--page-background);
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body.detail-open {
+  overflow: hidden;
+}
+
+.landing-page {
+  position: relative;
+  min-height: 240vh;
+}
+
+.hero-section {
+  min-height: 118vh;
+  overflow: hidden;
+  pointer-events: none;
+  position: relative;
+  top: 0;
+}
+
+.hero-lockup {
+  color: var(--accent);
+  backface-visibility: hidden;
+  left: 50%;
+  position: fixed;
+  text-align: center;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: opacity 120ms linear, transform 120ms linear;
+  white-space: nowrap;
+  will-change: opacity, transform;
+}
+
+.hero-primary {
+  transition: opacity 120ms linear, transform 120ms linear;
+  will-change: opacity, transform;
+}
+
+.hero-name {
+  color: var(--accent);
+  font-family: var(--display-font);
+  font-size: clamp(110px, 20vw, 320px);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  line-height: 0.86;
+  margin: 0;
+}
+
+.hero-surname {
+  color: var(--accent);
+  font-family: var(--display-font);
+  font-size: clamp(46px, 5.6vw, 104px);
+  font-weight: 200;
+  letter-spacing: -0.005em;
+  line-height: 1;
+  margin: 22px 0 0;
+}
+
+.hero-discipline {
+  color: var(--accent);
+  font-family: var(--display-font);
+  font-size: clamp(19px, 1.75vw, 34px);
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  line-height: 1;
+  margin: 34px 0 0;
+  text-transform: none;
+}
+
+/* Heads the projects section, centred at the very top of the second screen. */
+.section-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(16px, 2.2vw, 38px);
+  justify-content: center;
+  margin: 0 auto clamp(56px, 6vw, 104px);
+  max-width: 1400px;
+  width: 100%;
+}
+
+.section-links a {
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  color: var(--accent);
+  font-family: var(--display-font);
+  font-size: clamp(15px, 1.15vw, 22px);
+  font-weight: 500;
+  letter-spacing: 0.015em;
+  padding-bottom: 4px;
+  text-decoration: none;
+  transition: border-color 180ms ease;
+}
+
+.section-links a:hover {
+  border-bottom-color: var(--accent);
+}
+
+.section-links a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 5px;
+}
+
+/* One segmented control, not two buttons: a shared tint plus a sliding
+   indicator. Sits above the detail overlay (12) and its close button (13). */
+.language-toggle {
+  /* A tint rather than a border keeps the two halves reading as one control. */
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  display: inline-flex;
+  padding: 3px;
+  position: fixed;
+  right: var(--edge-inset);
+  top: var(--edge-inset);
+  z-index: 20;
+}
+
+.language-toggle-thumb {
+  background: color-mix(in srgb, var(--accent) 24%, var(--page-background));
+  bottom: 3px;
+  left: 3px;
+  position: absolute;
+  top: 3px;
+  transition: transform 240ms cubic-bezier(.2, .8, .2, 1);
+  width: calc(50% - 3px);
+}
+
+.language-toggle[data-language="es"] .language-toggle-thumb {
+  transform: translateX(100%);
+}
+
+.language-toggle button {
+  align-items: center;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  display: flex;
+  font-size: 21px;
+  justify-content: center;
+  line-height: 1;
+  padding: 5px 10px;
+  position: relative;
+  /* Dim the inactive flag rather than tinting it — the glyph has its own colour. */
+  filter: saturate(0.15) opacity(0.5);
+  transition: filter 200ms ease;
+}
+
+.language-toggle button:hover {
+  filter: saturate(0.65) opacity(0.85);
+}
+
+.language-toggle button[aria-pressed="true"] {
+  filter: none;
+}
+
+.language-toggle button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.projects-section {
+  margin-top: -37vh;
+  min-height: 122vh;
+  padding: 19vh clamp(24px, 4vw, 90px) 140px;
+  position: relative;
+  z-index: 2;
+}
+
+.projects-strip {
+  /* Cards sit on a shared baseline, so a one-line title next to a two-line one
+     still leaves both image panels aligned. */
+  align-items: end;
+  display: grid;
+  column-gap: clamp(36px, 5vw, 80px);
+  row-gap: clamp(84px, 9vw, 150px);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0 auto;
+  max-width: 1400px;
+  opacity: 0.18;
+  transform: translateY(90px);
+  transition: opacity 120ms linear, transform 120ms linear;
+  will-change: opacity, transform;
+}
+
+.project-item {
+  align-items: center;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  display: grid;
+  font: inherit;
+  gap: clamp(18px, 2vw, 34px);
+  min-width: 0;
+  padding: 0;
+  text-align: left;
+}
+
+/* Title beside the image. */
+.project-item[data-layout="left"] {
+  grid-template-columns: minmax(0, 1fr) var(--project-image-width);
+}
+
+.project-item[data-layout="right"] {
+  grid-template-columns: var(--project-image-width) minmax(0, 1fr);
+}
+
+/* Title above or below the image. */
+.project-item[data-layout="top"],
+.project-item[data-layout="bottom"] {
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: start;
+}
+
+.project-item[data-layout="top"] .project-media,
+.project-item[data-layout="bottom"] .project-media {
+  width: 100%;
+}
+
+/* The title is first in the DOM, so these two flip it past the image. */
+.project-item[data-layout="right"] .project-title,
+.project-item[data-layout="bottom"] .project-title {
+  order: 2;
+}
+
+.project-item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 14px;
+}
+
+.project-title {
+  color: #050505;
+  display: block;
+  font-family: "Space Grotesk", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(30px, 2.9vw, 56px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+  margin: 0;
+  min-width: 0;
+  transition: transform 240ms cubic-bezier(.2, .8, .2, 1);
+  will-change: transform;
+}
+
+/* Identical footprint for all five projects. */
+.project-media {
+  align-items: center;
+  aspect-ratio: 5 / 4;
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+  display: flex;
+  justify-content: center;
+  padding: clamp(8px, 1vw, 18px);
+  position: relative;
+  transition: background 220ms ease;
+  width: var(--project-image-width);
+  z-index: 1;
+}
+
+.project-image {
+  display: block;
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  transition: filter 220ms ease, transform 220ms ease;
+  will-change: transform;
+}
+
+.project-item:hover .project-title {
+  transform: translateY(-8px) scale(1.025);
+}
+
+.project-item:hover .project-media {
+  background: color-mix(in srgb, var(--accent) 11%, transparent);
+}
+
+.project-item:hover .project-image {
+  filter: saturate(1.08) contrast(1.04);
+  transform: scale(1.05);
+}
+
+.project-detail {
+  align-items: start;
+  background: var(--page-background);
+  display: grid;
+  inset: 0;
+  opacity: 0;
+  overflow-y: auto;
+  padding: calc(var(--edge-inset) + var(--close-offset) + clamp(44px, 5vw, 62px))
+    clamp(24px, 5vw, 76px) clamp(56px, 8vw, 120px);
+  pointer-events: none;
+  position: fixed;
+  transform: translateY(28px) scale(0.985);
+  transition: opacity 320ms ease, transform 320ms cubic-bezier(.2, .8, .2, 1);
+  z-index: 12;
+}
+
+.detail-open .project-detail {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.detail-open .projects-strip {
+  pointer-events: none;
+}
+
+/* A vertical stack of blocks; new text or image blocks just get appended. */
+.project-detail-inner {
+  display: grid;
+  gap: clamp(26px, 3.4vw, 52px);
+  margin: 0 auto;
+  max-width: 1180px;
+  width: 100%;
+}
+
+/* Title left, thumbnail right. */
+.project-detail-head {
+  align-items: center;
+  display: grid;
+  gap: clamp(28px, 4vw, 72px);
+  grid-template-columns: minmax(0, 1fr) clamp(200px, 25vw, 380px);
+}
+
+.project-detail-media {
+  align-items: center;
+  aspect-ratio: 5 / 4;
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+  display: flex;
+  justify-content: center;
+  padding: clamp(10px, 1.2vw, 20px);
+  width: 100%;
+}
+
+.project-detail-image {
+  display: block;
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.project-detail-kicker {
+  color: var(--accent);
+  font-family: "Space Grotesk", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.project-detail-title {
+  color: #050505;
+  font-family: "Space Grotesk", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(42px, 5.8vw, 88px);
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 0.98;
+  margin: 0;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+.project-detail-copy {
+  color: #303136;
+  display: grid;
+  gap: 20px;
+  min-width: 0;
+}
+
+/* Full width — the same span as the title plus the thumbnail — so images can
+   be inlined alongside the copy. Leading is looser to carry the long measure. */
+.project-detail-copy p {
+  font-family: "Space Grotesk", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(18px, 1.45vw, 25px);
+  line-height: 1.34;
+  margin: 0;
+}
+
+.project-detail-close {
+  appearance: none;
+  background: #050505;
+  border: 0;
+  color: #FBF9ED;
+  cursor: pointer;
+  font-family: "Space Grotesk", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 12px 18px;
+  position: fixed;
+  /* Top right, clearing the language toggle that sits above it. */
+  right: var(--edge-inset);
+  top: calc(var(--edge-inset) + var(--close-offset));
+  transition: background 180ms ease, transform 180ms ease;
+  z-index: 13;
+}
+
+.project-detail-close:hover,
+.project-detail-close:focus-visible {
+  background: var(--accent);
+  transform: translateY(-2px);
+}
+
+.detail-open .scroll-car {
+  opacity: 0;
+}
+
+.scroll-car {
+  height: auto;
+  opacity: 0.18;
+  pointer-events: none;
+  position: fixed;
+  right: -28px;
+  top: 0;
+  transition: opacity 120ms linear, transform 120ms linear;
+  width: clamp(47px, 5.3vw, 100px);
+  will-change: opacity, transform;
+  z-index: 3;
+}
+
+@media (max-width: 900px) {
+  .hero-lockup {
+    width: min(92vw, 720px);
+    white-space: normal;
+  }
+
+  .hero-name {
+    font-size: clamp(64px, 22vw, 170px);
+  }
+
+  .hero-surname {
+    font-size: clamp(34px, 9vw, 62px);
+    margin-top: 18px;
+  }
+
+  .hero-discipline {
+    font-size: clamp(15px, 4vw, 24px);
+    line-height: 1.08;
+    margin-top: 28px;
+  }
+
+  .projects-section {
+    margin-top: -37vh;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .projects-strip,
+  .project-item[data-layout] {
+    grid-template-columns: 1fr;
+  }
+
+  .project-item {
+    gap: 18px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .project-detail-head {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .project-detail-title {
+    font-size: clamp(38px, 12vw, 72px);
+  }
+
+  .project-detail-copy {
+    display: grid;
+    gap: 16px;
+  }
+
+  .project-detail-copy p {
+    font-size: clamp(17px, 4.8vw, 21px);
+    line-height: 1.28;
+  }
+
+  .scroll-car {
+    right: -22px;
+    top: 0;
+    width: clamp(39px, 10vw, 60px);
+  }
+}
