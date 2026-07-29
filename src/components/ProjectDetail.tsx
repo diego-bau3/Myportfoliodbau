@@ -54,28 +54,94 @@ export default function ProjectDetail({
       >
         {ui.close}
       </button>
-      {/* Stacked blocks: header row, then body. Further text and image blocks
-          can be appended here without touching the header. */}
+      {/* Stacked blocks: header row, then body. Projects with `blocks` render an
+          interleaved text/image article; the rest keep the title-plus-copy layout. */}
       <div className="project-detail-inner">
         <p className="project-detail-kicker">{ui.detailKicker}</p>
-        <div className="project-detail-head">
-          <h2 className="project-detail-title">{project?.detailTitle ?? ""}</h2>
-          {project ? (
-            <span className="project-detail-media">
-              <img
-                src={project.image}
-                alt={project.title}
-                className="project-detail-image"
-                decoding="async"
-              />
-            </span>
-          ) : null}
-        </div>
-        <div className="project-detail-copy">
-          {project?.paragraphs.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-        </div>
+        {project?.blocks ? (
+          <>
+            <header className="project-detail-head-full">
+              <h2 className="project-detail-title">{project.detailTitle}</h2>
+              {project.date ? (
+                <p className="project-detail-date">{project.date}</p>
+              ) : null}
+            </header>
+            <div className="project-detail-article">
+              {project.blocks.map((block, index) => {
+                if (block.kind === "text") {
+                  return (
+                    <p className="project-detail-para" key={index}>
+                      {block.text}
+                    </p>
+                  );
+                }
+                if (block.kind === "heading") {
+                  return (
+                    <h3 className="project-detail-subhead" key={index}>
+                      {block.text}
+                    </h3>
+                  );
+                }
+                if (block.kind === "link") {
+                  return (
+                    <p className="project-detail-para" key={index}>
+                      <a
+                        className="project-detail-link"
+                        href={block.href}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {block.label}
+                      </a>
+                    </p>
+                  );
+                }
+                return (
+                  <div
+                    className="project-detail-figures"
+                    data-count={block.images.length}
+                    key={index}
+                  >
+                    {block.images.map((src) => (
+                      <span className="project-detail-figure" key={src}>
+                        <img
+                          src={src}
+                          alt={project.detailTitle}
+                          className="project-detail-figure-img"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </span>
+                    ))}
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="project-detail-head">
+              <h2 className="project-detail-title">
+                {project?.detailTitle ?? ""}
+              </h2>
+              {project ? (
+                <span className="project-detail-media">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="project-detail-image"
+                    decoding="async"
+                  />
+                </span>
+              ) : null}
+            </div>
+            <div className="project-detail-copy">
+              {project?.paragraphs?.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </section>
   );
