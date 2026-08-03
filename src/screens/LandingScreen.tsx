@@ -24,7 +24,11 @@ export default function LandingScreen() {
   const sectionLinks = useMemo<SectionLink[]>(
     () => [
       { label: ui.startupLink, href: "https://ready2l.com/" },
-      { label: ui.portfolioLink, href: portfolioPdf },
+      {
+        label: ui.portfolioLink,
+        href: portfolioPdf,
+        download: "Diego-Bautista-Silva-Portfolio.pdf",
+      },
     ],
     [ui],
   );
