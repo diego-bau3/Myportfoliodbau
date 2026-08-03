@@ -197,7 +197,38 @@ body.detail-open {
   z-index: 2;
 }
 
+/* A vertical stack of titled section groups. */
 .projects-strip {
+  display: grid;
+  gap: clamp(74px, 8vw, 134px);
+  margin: 0 auto;
+  max-width: 1400px;
+  opacity: 0.18;
+  transform: translateY(90px);
+  transition: opacity 120ms linear, transform 120ms linear;
+  will-change: opacity, transform;
+}
+
+.project-section-group {
+  display: grid;
+  gap: clamp(34px, 4vw, 68px);
+}
+
+/* Small tracked label with a divider rule, so it stays quieter than the
+   project titles below it. */
+.project-section-title {
+  border-bottom: 1px solid color-mix(in srgb, #050505 16%, transparent);
+  color: #050505;
+  font-family: "Space Grotesk", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(15px, 1.5vw, 20px);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  margin: 0;
+  padding-bottom: clamp(12px, 1.4vw, 20px);
+  text-transform: uppercase;
+}
+
+.project-section-grid {
   /* Cards sit on a shared baseline, so a one-line title next to a two-line one
      still leaves both image panels aligned. */
   align-items: end;
@@ -205,12 +236,6 @@ body.detail-open {
   column-gap: clamp(36px, 5vw, 80px);
   row-gap: clamp(84px, 9vw, 150px);
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin: 0 auto;
-  max-width: 1400px;
-  opacity: 0.18;
-  transform: translateY(90px);
-  transition: opacity 120ms linear, transform 120ms linear;
-  will-change: opacity, transform;
 }
 
 .project-item {
@@ -568,7 +593,7 @@ body.detail-open {
     padding-right: 24px;
   }
 
-  .projects-strip,
+  .project-section-grid,
   .project-item[data-layout] {
     grid-template-columns: 1fr;
   }

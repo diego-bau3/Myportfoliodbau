@@ -11,6 +11,9 @@ export const LANGUAGE_LABELS: Record<Language, { flag: string; name: string }> =
 };
 
 /** Every string that isn't project content. */
+/** Section headings above the project grid. */
+export type SectionId = "hardware" | "software" | "work";
+
 type UiCopy = {
   tagline: string;
   heroLinksAria: string;
@@ -21,30 +24,33 @@ type UiCopy = {
   closeAria: string;
   languageAria: string;
   openProject: (title: string) => string;
+  sections: Record<SectionId, string>;
 };
 
 const UI: Record<Language, UiCopy> = {
   en: {
     tagline: "Mechanical Engineering | Aeronautics | Robotics",
     heroLinksAria: "Links",
-    startupLink: "My Startup",
-    portfolioLink: "100 page portfolio",
+    startupLink: "My Robotics Startup",
+    portfolioLink: "Portafolio [100p]",
     detailKicker: "Project detail",
     close: "Close",
     closeAria: "Close project details",
     languageAria: "Language",
     openProject: (title) => `Open ${title} details`,
+    sections: { hardware: "Hardware", software: "Software", work: "Work experience" },
   },
   es: {
     tagline: "Ingeniería Mecánica | Aeronáutica | Robótica",
     heroLinksAria: "Enlaces",
-    startupLink: "Mi Startup",
-    portfolioLink: "Portafolio de 100 páginas",
+    startupLink: "Mi Startup de Robótica",
+    portfolioLink: "Portafolio [100p]",
     detailKicker: "Detalle del proyecto",
     close: "Cerrar",
     closeAria: "Cerrar detalles del proyecto",
     languageAria: "Idioma",
     openProject: (title) => `Abrir detalles de ${title}`,
+    sections: { hardware: "Hardware", software: "Software", work: "Experiencia laboral" },
   },
 };
 

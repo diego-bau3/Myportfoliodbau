@@ -47,7 +47,20 @@ import so101d from "../../assets/so101/so101-04.webp";
 import so101e from "../../assets/so101/so101-05.webp";
 import so101f from "../../assets/so101/so101-06.webp";
 import so101g from "../../assets/so101/so101-07.webp";
-import type { Language } from "../i18n.tsx";
+import bomba01 from "../../assets/bomba/bomba-01.webp";
+import bomba02 from "../../assets/bomba/bomba-02.webp";
+import bomba03 from "../../assets/bomba/bomba-03.webp";
+import bomba04 from "../../assets/bomba/bomba-04.webp";
+import bomba05 from "../../assets/bomba/bomba-05.webp";
+import harv01 from "../../assets/harv/harv-01.webp";
+import harv02 from "../../assets/harv/harv-02.webp";
+import harv03 from "../../assets/harv/harv-03.webp";
+import harv04 from "../../assets/harv/harv-04.webp";
+import gripper01 from "../../assets/gripper/gripper-01.webp";
+import gripper02 from "../../assets/gripper/gripper-02.webp";
+import gripper03 from "../../assets/gripper/gripper-03.webp";
+import gripper04 from "../../assets/gripper/gripper-04.webp";
+import type { Language, SectionId } from "../i18n.tsx";
 
 type ProjectCopy = {
   /** Headline on the projects grid. */
@@ -74,6 +87,8 @@ export type Project = ProjectCopy & {
   key: string;
   image: string;
   layout: ProjectLayout;
+  /** Which grid section the card lives under. */
+  section: SectionId;
   /** When the work happened, shown under the detail title. */
   date?: string;
   /** Interleaved text/image blocks. When present, they replace `paragraphs`. */
@@ -85,6 +100,7 @@ type SharedFields = {
   key: string;
   image: string;
   layout: ProjectLayout;
+  section: SectionId;
   date?: string;
   blocks?: DetailBlock[];
 };
@@ -247,26 +263,188 @@ const SO101_BLOCKS: DetailBlock[] = [
   { kind: "figures", images: [so101g] },
 ];
 
+// docs/Portfolio.docx project 4 ("Bomba centrífuga").
+const BOMBA_BLOCKS: DetailBlock[] = [
+  { kind: "figures", images: [bomba01] },
+  {
+    kind: "text",
+    text: "Hice una bomba de agua, con impresión 3D, un motor que se terminó quemando (pero el eje sirvió para meterle un taladro), manguera y un garrafón.",
+  },
+  { kind: "figures", images: [bomba02, bomba03, bomba04] },
+  {
+    kind: "text",
+    text: "Entendiendo las bombas de agua industriales, logré diseñar algo que funcionaba: un impulsor, una cámara de descarga, un sello mecánico y rodamientos.",
+  },
+  { kind: "figures", images: [bomba05] },
+  {
+    kind: "text",
+    text: "Logré alcanzar una altura de bombeo de 2 metros, y analizar las propiedades de mi bomba con un aparato de venturi.",
+  },
+];
+
+// docs/Portfolio.docx project 11 ("Harv") — his manufacturing/ERP software.
+const HARV_BLOCKS: DetailBlock[] = [
+  {
+    kind: "text",
+    text: "Durante mi internship como practicante de mejora continua, estuve a cargo de analizar, verificar y mejorar los procesos actuales dentro de la planta de manufactura. Dentro de esta tuve la oportunidad de conocer todas las áreas, desde logística-recepción hasta logística-salida, de la mano de los operadores.",
+  },
+  {
+    kind: "text",
+    text: "Así me di cuenta de que tener una planta de manufactura puede ser más fácil de lo que llegamos a pensar: compras, ensamblas, vendes, ¿cierto?",
+  },
+  {
+    kind: "text",
+    text: "El problema surgió cuando me di cuenta de que las áreas están completamente apartadas del resto, cada una operando con su propio software. Lo que me generó mucho conflicto: de 3 a 4 ingenieros operando el mismo proceso de la planta, totalmente ineficiente.",
+  },
+  {
+    kind: "text",
+    text: "Al final todo debe estar ligado: no puedes ensamblar si no compras, no puedes pintar si no ensamblas, no puedes producir si no vendes.",
+  },
+  {
+    kind: "text",
+    text: "Harv es un software extremadamente completo y complejo. El flujo es así: agregas a tus trabajadores y defines roles y áreas, agregas tus productos, agregas los pasos para el producto final, generas compras, recibes, fabricas en planta, almacenas, generas órdenes de producción en base a tiempos de entrega y volumen de ventas, ensamblas, pruebas, empacas y envías.",
+  },
+  {
+    kind: "text",
+    text: "Todo conectado, predice en base a ventas para mantener inventario y nunca parar líneas de producción. Además está implementada un área de finanzas: puedes ver tu valor de mercancía, tu cashflow y el valor de activos físicos.",
+  },
+  {
+    kind: "text",
+    text: "Un feature increíble es que Harv trabaja con un agente local que analiza tu red y detecta automáticamente el equipo que tengas, por ejemplo impresoras 3D. El último test que se hizo fue imprimir 3 brazos SO101: genera las colas de producción, envía directamente a las impresoras y te avisa cuando hayan terminado, recolectas y sigue (este proceso se puede automatizar con extracción de placa de la impresora 3D automáticamente) y tendrías impresoras trabajando las 24 horas del día sin preocuparte, solo recolectando.",
+  },
+  {
+    kind: "link",
+    href: "https://github.com/diego-bau3/harv",
+    label: "Ver el código en GitHub",
+  },
+  { kind: "figures", images: [harv01, harv02, harv03, harv04] },
+];
+
+// docs/Portfolio.docx — the "Gripper intercambiable" concept, split out of the
+// SO101 write-up into its own project.
+const GRIPPER_BLOCKS: DetailBlock[] = [
+  {
+    kind: "text",
+    text: "Durante la teleoperación de todos estos brazos robóticos, en la que yo calculo que he invertido más de 200 horas operando, además de otras 400 horas entre amigos y personas curiosas, descubrí que todavía estamos muy lejos de tener un robot que sea realmente funcional dentro de una casa.",
+  },
+  {
+    kind: "text",
+    text: "Combinando esta experiencia con lo que hice anteriormente, que era la recolección de datos mediante un modelo de operación y captura egocéntrica, descubrí que todo sería muchísimo más sencillo si el robot pudiera utilizar directamente un gripper diseñado para realizar cada acción.",
+  },
+  {
+    kind: "text",
+    text: "Por ejemplo, pensemos en una cocina. Ahí utilizamos un trapo, una esponja para lavar los trastes, una espátula, un cucharón y diferentes utensilios para servir ensaladas o pastas. Después de analizar a fondo las principales interacciones que ocurren dentro de una cocina, me di cuenta de que una gran parte de ellas depende de muy pocas herramientas.",
+  },
+  {
+    kind: "text",
+    text: "Cuando recolectas datos utilizando una mano robótica con un gripper convencional, una parte importante del movimiento se utiliza solamente para sostener la herramienta y hacer presión sobre ella. Todavía quedan algunos movimientos rotativos, pero toda la operación se vuelve increíblemente compleja.",
+  },
+  {
+    kind: "text",
+    text: "Por ejemplo, imagina que quiero que mi robot agarre un cucharón, recoja sopa, mueva la olla o voltee una pechuga. Con un gripper convencional, hacerlo de manera precisa es extremadamente difícil.",
+  },
+  {
+    kind: "text",
+    text: "Además, cuando el robot sostiene una herramienta, se genera un brazo de palanca que queda fuera de nuestro control. Si alguien utiliza una herramienta diferente a la establecida, como una pala de madera más larga, podría generar un esfuerzo para el que el motor no está preparado y, en el peor de los casos, llegar a quemarlo.",
+  },
+  {
+    kind: "text",
+    text: "De ahí surgió mi idea: ¿por qué no tener un sistema de grippers intercambiables?",
+  },
+  {
+    kind: "text",
+    text: "Al principio pensé en utilizar un switch magnético. Este tipo de mecanismo cambia la dirección de un campo magnético, así que mi idea inicial era colocar un sistema magnético conectado a un servomotor. El servo giraría el mecanismo para atraer un gripper por medio de imanes y después volvería a girarlo para soltarlo.",
+  },
+  {
+    kind: "text",
+    text: "Sin embargo, esta solución resultó demasiado compleja. La fuerza generada por el campo magnético no era suficiente para atraer y sostener correctamente el otro lado del gripper, una cuchara o un cucharón.",
+  },
+  {
+    kind: "text",
+    text: "Después de analizar diferentes alternativas, encontré los imanes electropermanentes. Estos imanes no necesitan corriente eléctrica para mantenerse activados y conservar una herramienta montada. Además, para desactivarlos solamente necesitan recibir un pulso eléctrico.",
+  },
+  {
+    kind: "text",
+    text: "Esto significa que el consumo de energía necesario para cambiar de gripper sería mínimo.",
+  },
+  {
+    kind: "text",
+    text: "Pero la ventaja no está solamente en el consumo de energía. Al momento de teleoperar el robot para voltear una hamburguesa, un pan o una pieza de pollo, el movimiento resulta muchísimo más fácil y controlado cuando el robot utiliza directamente una espátula adaptada como gripper.",
+  },
+  {
+    kind: "text",
+    text: "Creo que este sistema podría cambiar por completo la forma en la que vemos a los robots domésticos, porque permitiría tener grippers para una gran variedad de tareas.",
+  },
+  {
+    kind: "text",
+    text: "Además, muchas de estas herramientas ya existen. Una persona ya compra cucharas, cucharones, espátulas, esponjas o trapos para su casa. No se trata de venderle algo adicional que no necesita, sino de adaptar objetos que ya utiliza para que también puedan ser manipulados por su robot.",
+  },
+  {
+    kind: "text",
+    text: "Si ya tienes utensilios, podrías adaptarlos. Si compras un robot nuevo, podrías adquirir herramientas compatibles o convertir las que ya tienes.",
+  },
+  {
+    kind: "text",
+    text: "De esta forma se podría crear todo un ecosistema de herramientas. Podrías tener un gripper para limpiar vidrios sin rayarlos, otro para lavar el baño, otro para cocinar y otro para realizar tareas generales.",
+  },
+  {
+    kind: "text",
+    text: "Esto tampoco significa que deba existir un gripper diferente para cada acción. No tendría sentido tener uno exclusivamente para levantar un tornillo y otro para mover un objeto pequeño.",
+  },
+  {
+    kind: "text",
+    text: "La idea es agrupar las tareas que son difíciles de realizar con una pinza convencional. El robot podría conservar un gripper normal para acciones como doblar ropa, mover objetos o limpiar determinadas superficies, pero podría cambiar de herramienta cuando una tarea requiera una función más especializada.",
+  },
+  {
+    kind: "text",
+    text: "Con un gripper convencional, el robot necesita aprender cómo tomar una cuchara, con qué fuerza sostenerla, en qué posición colocar los dedos y cómo evitar que se deslice. También es necesario reducir la fricción, aumentar la fuerza de los motores y consumir más energía.",
+  },
+  {
+    kind: "text",
+    text: "Todo esto se traduce en una mayor cantidad de datos de entrenamiento.",
+  },
+  {
+    kind: "text",
+    text: "Con mi sistema, el robot solamente tendría que llegar a la estación de herramientas, soltar el gripper actual, tomar uno nuevo y continuar con la siguiente tarea.",
+  },
+  {
+    kind: "text",
+    text: "El cambio de grippers podría realizarse completamente mediante visión. Actualmente ya he probado el concepto en simulación, aunque todavía no he integrado el sistema de visión. También estoy esperando recibir los imanes electropermanentes para confirmar físicamente que el mecanismo funciona como espero.",
+  },
+  {
+    kind: "text",
+    text: "Lo que más me entusiasma es que este sistema podría costar menos de $20, posiblemente muchísimo menos.",
+  },
+  {
+    kind: "text",
+    text: "Si podemos incorporar una solución tan económica dentro de un robot, simplificar sus movimientos, reducir la cantidad de datos que necesita y permitirle utilizar herramientas diseñadas específicamente para cada tarea, creo que realmente podríamos cambiar el mundo.",
+  },
+  { kind: "heading", text: "Último diseño" },
+  { kind: "figures", images: [gripper01, gripper02, gripper03, gripper04] },
+];
+
 const ENTRIES: ProjectEntry[] = [
   {
     key: "aircraft",
     layout: "top",
-    image: rcAircraft,
+    section: "hardware",
+    image:rcAircraft,
     date: "Noviembre – Diciembre 2024",
     blocks: PLANE_BLOCKS,
     en: {
       title: "Combustion-Powered RC Aircraft",
-      detailTitle: "Messerschmitt Bf 109 a motor de combustión",
+      detailTitle: "Messerschmitt Bf 109 escalado a motor de combustión",
     },
     es: {
       title: "Avión RC con motor de combustión",
-      detailTitle: "Messerschmitt Bf 109 a motor de combustión",
+      detailTitle: "Messerschmitt Bf 109 escalado a motor de combustión",
     },
   },
   {
     key: "cnc",
     layout: "top",
-    image: cncLathe,
+    section: "hardware",
+    image:cncLathe,
     date: "Marzo – Junio 2026",
     blocks: CNC_BLOCKS,
     en: {
@@ -279,8 +457,54 @@ const ENTRIES: ProjectEntry[] = [
     },
   },
   {
+    key: "so101",
+    layout: "top",
+    section: "hardware",
+    image:so101RoboticArm,
+    blocks: SO101_BLOCKS,
+    en: {
+      title: "SO-101 Robotic Arm Learning System",
+      detailTitle: "SO-101",
+    },
+    es: {
+      title: "Sistema de aprendizaje con brazo robótico SO-101",
+      detailTitle: "SO-101",
+    },
+  },
+  {
+    key: "gripper",
+    layout: "top",
+    section: "hardware",
+    image: gripper01,
+    blocks: GRIPPER_BLOCKS,
+    en: {
+      title: "Interchangeable Gripper System",
+      detailTitle: "Gripper intercambiable",
+    },
+    es: {
+      title: "Sistema de gripper intercambiable",
+      detailTitle: "Gripper intercambiable",
+    },
+  },
+  {
+    key: "wearable",
+    layout: "top",
+    section: "hardware",
+    image: wearableCollector,
+    blocks: WEARABLE_BLOCKS,
+    en: {
+      title: "Wearable Data Collector for Robotics",
+      detailTitle: "Recolección de datos vestible para robótica",
+    },
+    es: {
+      title: "Recolector de datos vestible para robótica",
+      detailTitle: "Recolección de datos vestible para robótica",
+    },
+  },
+  {
     key: "car",
     layout: "top",
+    section: "hardware",
     image: brushlessMotorCar,
     date: "Noviembre – Diciembre 2021",
     blocks: CAR_BLOCKS,
@@ -294,31 +518,34 @@ const ENTRIES: ProjectEntry[] = [
     },
   },
   {
-    key: "wearable",
+    key: "bomba",
     layout: "top",
-    image: wearableCollector,
-    blocks: WEARABLE_BLOCKS,
+    section: "hardware",
+    image: bomba01,
+    date: "Noviembre – Diciembre 2021",
+    blocks: BOMBA_BLOCKS,
     en: {
-      title: "Wearable Data Collector for Robotics",
-      detailTitle: "Recolección de datos vestible para robótica",
+      title: "Centrifugal Water Pump",
+      detailTitle: "Bomba centrífuga",
     },
     es: {
-      title: "Recolector de datos vestible para robótica",
-      detailTitle: "Recolección de datos vestible para robótica",
+      title: "Bomba centrífuga",
+      detailTitle: "Bomba centrífuga",
     },
   },
   {
-    key: "so101",
+    key: "harv",
     layout: "top",
-    image: so101RoboticArm,
-    blocks: SO101_BLOCKS,
+    section: "software",
+    image: harv01,
+    blocks: HARV_BLOCKS,
     en: {
-      title: "SO-101 Robotic Arm Learning System",
-      detailTitle: "SO-101",
+      title: "Harv — Manufacturing ERP",
+      detailTitle: "Harv",
     },
     es: {
-      title: "Sistema de aprendizaje con brazo robótico SO-101",
-      detailTitle: "SO-101",
+      title: "Harv — ERP de manufactura",
+      detailTitle: "Harv",
     },
   },
 ];
@@ -328,6 +555,7 @@ export function projectsFor(language: Language): Project[] {
     key: entry.key,
     image: entry.image,
     layout: entry.layout,
+    section: entry.section,
     date: entry.date,
     blocks: entry.blocks,
     ...entry[language],
