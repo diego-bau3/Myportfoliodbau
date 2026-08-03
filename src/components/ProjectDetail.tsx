@@ -82,6 +82,22 @@ export default function ProjectDetail({
                     </h3>
                   );
                 }
+                if (block.kind === "video") {
+                  return (
+                    <div className="project-detail-video-wrap" key={index}>
+                      <video
+                        className="project-detail-video"
+                        src={block.src}
+                        poster={block.poster}
+                        controls
+                        loop
+                        muted
+                        playsInline
+                        preload="metadata"
+                      />
+                    </div>
+                  );
+                }
                 if (block.kind === "link") {
                   return (
                     <p className="project-detail-para" key={index}>

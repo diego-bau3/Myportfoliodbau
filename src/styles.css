@@ -524,6 +524,21 @@ body.detail-open {
   width: 100%;
 }
 
+/* A single embedded clip, centered; portrait videos are capped by height so
+   they don't dominate the reading column. */
+.project-detail-video-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.project-detail-video {
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+  display: block;
+  height: auto;
+  max-height: min(78vh, 700px);
+  max-width: 100%;
+}
+
 .project-detail-close {
   appearance: none;
   background: #050505;

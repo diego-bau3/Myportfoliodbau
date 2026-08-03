@@ -60,6 +60,8 @@ import gripper01 from "../../assets/gripper/gripper-01.webp";
 import gripper02 from "../../assets/gripper/gripper-02.webp";
 import gripper03 from "../../assets/gripper/gripper-03.webp";
 import gripper04 from "../../assets/gripper/gripper-04.webp";
+import pieceMagnetVideo from "../../assets/videos/piece-magnet.mp4";
+import pieceMagnetPoster from "../../assets/videos/piece-magnet-poster.webp";
 import type { Language, SectionId } from "../i18n.tsx";
 
 type ProjectCopy = {
@@ -79,6 +81,7 @@ export type DetailBlock =
   | { kind: "text"; text: string }
   | { kind: "heading"; text: string }
   | { kind: "figures"; images: string[] }
+  | { kind: "video"; src: string; poster?: string }
   | { kind: "link"; href: string; label: string };
 
 /** A project resolved into a single language, ready to render. */
@@ -421,6 +424,7 @@ const GRIPPER_BLOCKS: DetailBlock[] = [
   },
   { kind: "heading", text: "Último diseño" },
   { kind: "figures", images: [gripper01, gripper02, gripper03, gripper04] },
+  { kind: "video", src: pieceMagnetVideo, poster: pieceMagnetPoster },
 ];
 
 const ENTRIES: ProjectEntry[] = [

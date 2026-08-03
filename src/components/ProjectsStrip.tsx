@@ -8,9 +8,6 @@ import type { SectionId } from "../i18n.tsx";
 export type SectionLink = {
   label: string;
   href: string;
-  /** When set, the link downloads its target with this filename instead of
-      opening it in a new tab. */
-  download?: string;
 };
 
 /** Fixed top-to-bottom order of the grid sections. */
@@ -44,22 +41,16 @@ export default function ProjectsStrip({
   return (
     <section className="projects-section" id="projects">
       <nav className="section-links" aria-label={linksLabel}>
-        {links.map((link) =>
-          link.download ? (
-            <a key={link.href} href={link.href} download={link.download}>
-              {link.label}
-            </a>
-          ) : (
-            <a
-              key={link.href}
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {link.label}
-            </a>
-          ),
-        )}
+        {links.map((link) => (
+          <a
+            key={link.href}
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {link.label}
+          </a>
+        ))}
       </nav>
       <div className="projects-strip" ref={stripRef}>
         {groups.map((group) => (
