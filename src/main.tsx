@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 
 import LanguageToggle from "./components/LanguageToggle.tsx";
 import { LanguageProvider } from "./i18n.tsx";
-import LandingScreen from "./screens/LandingScreen.tsx";
+import HangarScreen from "./screens/HangarScreen.tsx";
 import "./styles.css";
 
 const root = document.getElementById("root");
@@ -14,7 +14,7 @@ createRoot(root).render(
     <LanguageProvider>
       {/* Outside the screen, so it stays put on every screen we ever add. */}
       <LanguageToggle />
-      <LandingScreen />
+      <HangarScreen />
     </LanguageProvider>
   </StrictMode>,
 );

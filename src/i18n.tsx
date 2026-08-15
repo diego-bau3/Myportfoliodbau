@@ -16,6 +16,15 @@ export type SectionId = "hardware" | "software" | "work";
 
 type UiCopy = {
   tagline: string;
+  primaryNavigation: string;
+  work: string;
+  about: string;
+  hangarKicker: string;
+  featuredProjects: string;
+  explore: string;
+  scrollToExplore: string;
+  hangarNextKicker: string;
+  hangarNextTitle: string;
   heroLinksAria: string;
   startupLink: string;
   portfolioLink: string;
@@ -30,6 +39,15 @@ type UiCopy = {
 const UI: Record<Language, UiCopy> = {
   en: {
     tagline: "Mechanical Engineering | Aeronautics | Robotics",
+    primaryNavigation: "Primary navigation",
+    work: "Work",
+    about: "About",
+    hangarKicker: "Portfolio / Selected machines",
+    featuredProjects: "Featured projects",
+    explore: "Explore",
+    scrollToExplore: "Scroll to explore",
+    hangarNextKicker: "Next milestone",
+    hangarNextTitle: "Project details will become technical stations inside this same hangar.",
     heroLinksAria: "Links",
     startupLink: "My Robotics Startup",
     portfolioLink: "Portafolio [50p]",
@@ -42,6 +60,15 @@ const UI: Record<Language, UiCopy> = {
   },
   es: {
     tagline: "Ingeniería Mecánica | Aeronáutica | Robótica",
+    primaryNavigation: "Navegación principal",
+    work: "Proyectos",
+    about: "Acerca de",
+    hangarKicker: "Portafolio / Máquinas seleccionadas",
+    featuredProjects: "Proyectos destacados",
+    explore: "Explorar",
+    scrollToExplore: "Desliza para explorar",
+    hangarNextKicker: "Siguiente etapa",
+    hangarNextTitle: "Los detalles de cada proyecto serán estaciones técnicas dentro de este mismo hangar.",
     heroLinksAria: "Enlaces",
     startupLink: "Mi Startup de Robótica",
     portfolioLink: "Portafolio [50p]",
