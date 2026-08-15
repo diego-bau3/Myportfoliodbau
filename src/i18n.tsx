@@ -38,7 +38,7 @@ type UiCopy = {
 
 const UI: Record<Language, UiCopy> = {
   en: {
-    tagline: "Mechanical Engineering | Aeronautics | Robotics",
+    tagline: "Mechanical Engineering · Aeronautics · Robotics",
     primaryNavigation: "Primary navigation",
     work: "Work",
     about: "About",
@@ -59,7 +59,7 @@ const UI: Record<Language, UiCopy> = {
     sections: { hardware: "Hardware", software: "Software", work: "Work experience" },
   },
   es: {
-    tagline: "Ingeniería Mecánica | Aeronáutica | Robótica",
+    tagline: "Ingeniería Mecánica · Aeronáutica · Robótica",
     primaryNavigation: "Navegación principal",
     work: "Proyectos",
     about: "Acerca de",
