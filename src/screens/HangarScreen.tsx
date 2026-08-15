@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import portfolioPdf from "../../assets/diego-bau-portfolio.pdf";
 import hangarBackground from "../../assets/hangar-background-v1.png";
+import integratedHangarBackground from "../../assets/hangar-hero-integrated-v2.png";
 import HangarBay from "../components/HangarBay.tsx";
 import ProjectDetail from "../components/ProjectDetail.tsx";
 import { projectsFor } from "../data/projects.ts";
@@ -116,7 +117,16 @@ export default function HangarScreen() {
       </a>
       <section className={`hangar-showcase is-level-${activeLevel + 1}`} id="hangar-work">
         <div className="hangar-stage" aria-hidden="true">
-          <img className="hangar-stage-photo" src={hangarBackground} alt="" />
+          <img
+            className="hangar-stage-photo hangar-stage-photo--clean"
+            src={hangarBackground}
+            alt=""
+          />
+          <img
+            className="hangar-stage-photo hangar-stage-photo--integrated"
+            src={integratedHangarBackground}
+            alt=""
+          />
           <div className="hangar-roof" />
           <div className="hangar-wall" />
         </div>

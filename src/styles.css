@@ -965,8 +965,18 @@ body.detail-open {
   object-fit: cover;
   object-position: center center;
   position: absolute;
+  transition: opacity 420ms ease;
   width: 100%;
   z-index: -4;
+}
+
+.hangar-stage-photo--integrated {
+  opacity: 0;
+  z-index: -3;
+}
+
+.hangar-showcase.is-level-1 .hangar-stage-photo--integrated {
+  opacity: 1;
 }
 
 .hangar-stage::before,
@@ -1492,6 +1502,13 @@ body.detail-open {
   right: 30%;
 }
 
+@media (min-width: 901px) {
+  #hangar-level-01 .hangar-bay-image,
+  #hangar-level-01 .hangar-bay-machine::after {
+    opacity: 0;
+  }
+}
+
 .hangar-bay-floor {
   border-bottom: 1px solid var(--hangar-blue);
   border-left: 1px solid var(--hangar-blue);
@@ -1635,6 +1652,10 @@ body.detail-open {
 }
 
 @media (max-width: 900px) {
+  .hangar-stage-photo--integrated {
+    display: none;
+  }
+
   .hangar-stage {
     min-height: 100svh;
   }
