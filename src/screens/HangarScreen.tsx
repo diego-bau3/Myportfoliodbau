@@ -165,6 +165,8 @@ export default function HangarScreen() {
         <div className="hangar-levels">
           {levels.map((levelProjects, levelIndex) => {
             const copy = levelCopy[levelIndex] ?? levelCopy[0];
+            const hasLoadingBay = levelIndex === levels.length - 1;
+            const visibleBayCount = levelProjects.length + (hasLoadingBay ? 1 : 0);
             const nextTarget =
               levelIndex < levels.length - 1
                 ? `#hangar-level-0${levelIndex + 2}`
@@ -205,7 +207,7 @@ export default function HangarScreen() {
                   )}
 
                   <div
-                    className={`hangar-bays hangar-bays--${levelProjects.length}`}
+                    className={`hangar-bays hangar-bays--${visibleBayCount}`}
                     aria-label={`${ui.featuredProjects}: ${copy.label}`}
                   >
                     {levelProjects.map((project, projectIndex) => (
@@ -224,6 +226,22 @@ export default function HangarScreen() {
                         project={project}
                       />
                     ))}
+                    {hasLoadingBay ? (
+                      <div
+                        aria-label={
+                          language === "es"
+                            ? "Próximo proyecto en preparación"
+                            : "Next project in preparation"
+                        }
+                        className="hangar-bay hangar-bay--loading"
+                        role="status"
+                      >
+                        <span className="hangar-loading-module" aria-hidden="true">
+                          <span className="hangar-loading-label">LOADING...</span>
+                          <span className="hangar-loading-track" />
+                        </span>
+                      </div>
+                    ) : null}
                   </div>
 
                   <a className="hangar-scroll-cue" href={nextTarget}>

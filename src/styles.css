@@ -1461,6 +1461,70 @@ body.detail-open {
   color: var(--hangar-coral);
 }
 
+.hangar-bay--loading {
+  align-items: center;
+  cursor: default;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.hangar-loading-module {
+  align-items: center;
+  color: #5d6870;
+  display: grid;
+  filter: blur(6px);
+  gap: 14px;
+  justify-items: center;
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    filter 620ms 150ms cubic-bezier(.22, 1, .36, 1),
+    opacity 440ms 150ms ease,
+    transform 620ms 150ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.hangar-showcase.is-level-3 .hangar-loading-module {
+  filter: blur(0);
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hangar-loading-label {
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-size: clamp(12px, 1vw, 16px);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.hangar-loading-track {
+  background: rgba(93, 104, 112, 0.18);
+  height: 1px;
+  overflow: hidden;
+  position: relative;
+  width: clamp(82px, 8vw, 132px);
+}
+
+.hangar-loading-track::after {
+  animation: hangar-loading-scan 1.8s ease-in-out infinite;
+  background: var(--hangar-blue);
+  content: "";
+  inset: 0 auto 0 0;
+  position: absolute;
+  transform: translateX(-130%);
+  width: 42%;
+}
+
+@keyframes hangar-loading-scan {
+  0% {
+    transform: translateX(-130%);
+  }
+  55%,
+  100% {
+    transform: translateX(340%);
+  }
+}
+
 .hangar-bay-number {
   color: var(--hangar-blue);
   display: none;
@@ -2072,6 +2136,7 @@ body.detail-open {
   .hangar-bay,
   .hangar-bay-image,
   .hangar-bay-title,
+  .hangar-loading-module,
   .hangar-level-shell,
   .hangar-level-rail a,
   .hangar-nav a::after {
@@ -2081,6 +2146,12 @@ body.detail-open {
 
   .hangar-bay-title {
     filter: none;
+  }
+
+  .hangar-loading-track::after {
+    animation: none;
+    transform: none;
+    width: 100%;
   }
 }
 
