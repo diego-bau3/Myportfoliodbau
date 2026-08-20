@@ -1341,7 +1341,7 @@ body.detail-open {
   cursor: pointer;
   display: grid;
   font: inherit;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: 1fr auto auto;
   height: clamp(270px, 38.7vh, 400px);
   min-width: 0;
   overflow: visible;
@@ -1386,24 +1386,77 @@ body.detail-open {
   align-items: center;
   display: flex;
   gap: 14px;
-  height: 58px;
+  height: 64px;
   justify-content: center;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 26%,
+    black 74%,
+    transparent 100%
+  );
+  overflow: hidden;
   padding: 0 24px;
   position: relative;
   text-align: center;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 26%,
+    black 74%,
+    transparent 100%
+  );
   z-index: 2;
 }
 
 .hangar-bay-title {
+  color: var(--hangar-ink);
+  filter: blur(7px);
   font-family: var(--display-font);
   font-size: clamp(13px, 1.05vw, 18px);
   font-weight: 750;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.055em;
+  opacity: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   text-transform: uppercase;
+  transform: translateY(145%) scale(0.985);
+  transition:
+    color 220ms ease,
+    filter 620ms cubic-bezier(.22, 1, .36, 1),
+    opacity 420ms ease,
+    transform 620ms cubic-bezier(.22, 1, .36, 1);
   white-space: nowrap;
   width: 100%;
+}
+
+.hangar-showcase.is-level-1 #hangar-level-01 .hangar-bay-title,
+.hangar-showcase.is-level-2 #hangar-level-02 .hangar-bay-title,
+.hangar-showcase.is-level-3 #hangar-level-03 .hangar-bay-title {
+  filter: blur(0);
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.hangar-showcase.is-level-2 #hangar-level-01 .hangar-bay-title,
+.hangar-showcase.is-level-3 #hangar-level-01 .hangar-bay-title,
+.hangar-showcase.is-level-3 #hangar-level-02 .hangar-bay-title {
+  filter: blur(7px);
+  opacity: 0;
+  transform: translateY(-145%) scale(0.985);
+}
+
+.hangar-bay:nth-child(2) .hangar-bay-title {
+  transition-delay: 55ms;
+}
+
+.hangar-bay:nth-child(3) .hangar-bay-title {
+  transition-delay: 110ms;
+}
+
+.hangar-bay:hover .hangar-bay-title,
+.hangar-bay:focus-visible .hangar-bay-title {
+  color: var(--hangar-coral);
 }
 
 .hangar-bay-number {
@@ -1506,6 +1559,13 @@ body.detail-open {
 }
 
 @media (min-width: 901px) {
+  .hangar-bay-heading {
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 2px);
+  }
+
   #hangar-level-01 .hangar-bay-image,
   #hangar-level-01 .hangar-bay-machine::after {
     opacity: 0;
@@ -1966,11 +2026,16 @@ body.detail-open {
   .hangar-scroll-cue span:last-child,
   .hangar-bay,
   .hangar-bay-image,
+  .hangar-bay-title,
   .hangar-level-shell,
   .hangar-level-rail a,
   .hangar-nav a::after {
     animation: none;
     transition: none;
+  }
+
+  .hangar-bay-title {
+    filter: none;
   }
 }
 

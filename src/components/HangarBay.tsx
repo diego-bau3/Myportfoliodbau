@@ -29,12 +29,6 @@ export default function HangarBay({
       onClick={() => onOpen(project.key)}
     >
       <span className="hangar-bay-ceiling" aria-hidden="true" />
-      <span className="hangar-bay-heading">
-        <span className="hangar-bay-title">{displayTitle}</span>
-        <span className="hangar-bay-number">
-          {String(number).padStart(2, "0")}
-        </span>
-      </span>
       <span className="hangar-bay-machine">
         <img
           src={project.image}
@@ -42,6 +36,12 @@ export default function HangarBay({
           className="hangar-bay-image"
           decoding="async"
         />
+      </span>
+      <span className="hangar-bay-heading">
+        <span className="hangar-bay-title">{displayTitle}</span>
+        <span className="hangar-bay-number">
+          {String(number).padStart(2, "0")}
+        </span>
       </span>
       <span className="hangar-bay-floor" aria-hidden="true" />
       <span className="hangar-bay-meta">
