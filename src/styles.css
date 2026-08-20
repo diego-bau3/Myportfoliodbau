@@ -1386,8 +1386,9 @@ body.detail-open {
   align-items: center;
   display: flex;
   gap: 14px;
+  height: 58px;
   justify-content: center;
-  padding: 20px 24px 0;
+  padding: 0 24px;
   position: relative;
   text-align: center;
   z-index: 2;
