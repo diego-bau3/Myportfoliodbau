@@ -57,6 +57,7 @@ import harv02 from "../../assets/harv/harv-02.webp";
 import harv03 from "../../assets/harv/harv-03.webp";
 import harv04 from "../../assets/harv/harv-04.webp";
 import gripper01 from "../../assets/gripper/gripper-01.webp";
+import gripperCutout from "../../assets/gripper/gripper-01-cutout.webp";
 import gripper02 from "../../assets/gripper/gripper-02.webp";
 import gripper03 from "../../assets/gripper/gripper-03.webp";
 import gripper04 from "../../assets/gripper/gripper-04.webp";
@@ -479,7 +480,7 @@ const ENTRIES: ProjectEntry[] = [
     key: "gripper",
     layout: "top",
     section: "hardware",
-    image: gripper01,
+    image: gripperCutout,
     blocks: GRIPPER_BLOCKS,
     en: {
       title: "Interchangeable Gripper System",
