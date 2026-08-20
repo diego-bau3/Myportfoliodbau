@@ -1562,7 +1562,33 @@ body.detail-open {
 
 @media (min-width: 901px) {
   html {
+    overflow: hidden;
+    scroll-snap-type: none;
+  }
+
+  body {
+    height: 100svh;
+    overflow: hidden;
+  }
+
+  .hangar-page {
+    height: 100svh;
+    min-height: 0;
+    overscroll-behavior-y: contain;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scroll-behavior: smooth;
     scroll-snap-type: y mandatory;
+  }
+
+  .detail-open .hangar-page {
+    overflow-y: hidden;
+  }
+
+  .hangar-level {
+    height: 100svh;
+    min-height: 100svh;
+    scroll-margin-top: 0;
   }
 
   .hangar-bay-heading {
@@ -1724,6 +1750,7 @@ body.detail-open {
 
 @media (min-width: 901px) {
   .hangar-about {
+    height: 100svh;
     min-height: 100svh;
   }
 }
