@@ -1178,6 +1178,8 @@ body.detail-open {
   min-height: 100svh;
   position: relative;
   scroll-margin-top: 74px;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 .hangar-level:focus {
@@ -1559,6 +1561,10 @@ body.detail-open {
 }
 
 @media (min-width: 901px) {
+  html {
+    scroll-snap-type: y mandatory;
+  }
+
   .hangar-bay-heading {
     left: 0;
     position: absolute;
@@ -1681,6 +1687,8 @@ body.detail-open {
   display: grid;
   min-height: 52vh;
   padding: clamp(40px, 7vw, 110px);
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 .hangar-about p {
@@ -1714,7 +1722,17 @@ body.detail-open {
   background: white;
 }
 
+@media (min-width: 901px) {
+  .hangar-about {
+    min-height: 100svh;
+  }
+}
+
 @media (max-width: 900px) {
+  html {
+    scroll-snap-type: y proximity;
+  }
+
   .hangar-stage-photo--integrated {
     display: none;
   }
