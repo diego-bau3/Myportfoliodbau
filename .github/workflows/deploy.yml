@@ -24,9 +24,7 @@ jobs:
         with:
           bun-version: "1.3.9"
       - run: bun install
-      - run: bun build ./index.html --outdir=dist --production
-      # Keep the custom domain (diegobau.com) on the published site.
-      - run: cp CNAME dist/CNAME
+      - run: bun run build
       - uses: actions/configure-pages@v5
         with:
           enablement: true

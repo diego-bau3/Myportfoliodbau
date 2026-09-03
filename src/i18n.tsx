@@ -1,5 +1,7 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
+
+import { homePath, languageFromPath, pathWithLanguage, replaceRoute } from "./routing.ts";
 
 export const LANGUAGES = ["en", "es"] as const;
 export type Language = (typeof LANGUAGES)[number];
@@ -18,15 +20,13 @@ type UiCopy = {
   tagline: string;
   primaryNavigation: string;
   work: string;
-  about: string;
   hangarKicker: string;
   featuredProjects: string;
   explore: string;
   scrollToExplore: string;
-  hangarNextKicker: string;
-  hangarNextTitle: string;
   heroLinksAria: string;
   startupLink: string;
+  portfolioNav: string;
   portfolioLink: string;
   detailKicker: string;
   close: string;
@@ -40,17 +40,15 @@ const UI: Record<Language, UiCopy> = {
   en: {
     tagline: "Mechanical Engineering · Aeronautics · Robotics",
     primaryNavigation: "Primary navigation",
-    work: "Work",
-    about: "About",
+    work: "Projects",
     hangarKicker: "Portfolio / Selected machines",
     featuredProjects: "Featured projects",
     explore: "Explore",
     scrollToExplore: "Scroll to explore",
-    hangarNextKicker: "Next milestone",
-    hangarNextTitle: "Project details will become technical stations inside this same hangar.",
     heroLinksAria: "Links",
-    startupLink: "My Robotics Startup",
-    portfolioLink: "Portafolio [50p]",
+    startupLink: "Ready2L — Robotics Startup",
+    portfolioNav: "Portfolio",
+    portfolioLink: "Portfolio PDF",
     detailKicker: "Project detail",
     close: "Close",
     closeAria: "Close project details",
@@ -62,16 +60,14 @@ const UI: Record<Language, UiCopy> = {
     tagline: "Ingeniería Mecánica · Aeronáutica · Robótica",
     primaryNavigation: "Navegación principal",
     work: "Proyectos",
-    about: "Acerca de",
     hangarKicker: "Portafolio / Máquinas seleccionadas",
     featuredProjects: "Proyectos destacados",
     explore: "Explorar",
     scrollToExplore: "Desliza para explorar",
-    hangarNextKicker: "Siguiente etapa",
-    hangarNextTitle: "Los detalles de cada proyecto serán estaciones técnicas dentro de este mismo hangar.",
     heroLinksAria: "Enlaces",
-    startupLink: "Mi Startup de Robótica",
-    portfolioLink: "Portafolio [50p]",
+    startupLink: "Ready2L — Startup de robótica",
+    portfolioNav: "Portafolio",
+    portfolioLink: "Portafolio PDF",
     detailKicker: "Detalle del proyecto",
     close: "Cerrar",
     closeAria: "Cerrar detalles del proyecto",
@@ -84,6 +80,8 @@ const UI: Record<Language, UiCopy> = {
 const STORAGE_KEY = "language";
 
 function initialLanguage(): Language {
+  const routed = languageFromPath();
+  if (routed) return routed;
   const saved = localStorage.getItem(STORAGE_KEY);
   if (saved === "en" || saved === "es") return saved;
   return "en";
@@ -98,12 +96,31 @@ type LanguageValue = {
 const LanguageContext = createContext<LanguageValue | null>(null);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>(initialLanguage);
+  const [language, setLanguageState] = useState<Language>(initialLanguage);
+
+  const setLanguage = useCallback((nextLanguage: Language) => {
+    setLanguageState(nextLanguage);
+    const nextPath = pathWithLanguage(nextLanguage);
+    replaceRoute(`${nextPath}${window.location.search}${window.location.hash}`);
+  }, []);
 
   useEffect(() => {
     document.documentElement.lang = language;
     localStorage.setItem(STORAGE_KEY, language);
+    if (!languageFromPath()) {
+      replaceRoute(`${homePath(language)}${window.location.search}${window.location.hash}`);
+    }
   }, [language]);
+
+  useEffect(() => {
+    const syncLanguageFromRoute = (): void => {
+      const routed = languageFromPath();
+      if (routed) setLanguageState(routed);
+    };
+
+    window.addEventListener("popstate", syncLanguageFromRoute);
+    return () => window.removeEventListener("popstate", syncLanguageFromRoute);
+  }, []);
 
   const value = useMemo<LanguageValue>(
     () => ({ language, setLanguage, ui: UI[language] }),

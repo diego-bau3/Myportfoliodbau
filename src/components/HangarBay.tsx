@@ -24,6 +24,8 @@ export default function HangarBay({
       aria-haspopup="dialog"
       className="hangar-bay"
       data-project={project.key}
+      data-section={project.section}
+      id={`project-${project.slug}`}
       type="button"
       aria-label={ui.openProject(project.detailTitle)}
       onClick={() => onOpen(project.key)}

@@ -7,6 +7,7 @@ import HangarBay from "../components/HangarBay.tsx";
 import ProjectDetail from "../components/ProjectDetail.tsx";
 import { projectsFor } from "../data/projects.ts";
 import { useLanguage } from "../i18n.tsx";
+import { homePath, homeSectionPath, projectPath, projectSlugFromPath, pushRoute } from "../routing.ts";
 
 const PROJECT_LEVELS = [
   ["cnc", "aircraft", "so101"],
@@ -27,52 +28,6 @@ const LEVEL_COPY = {
   ],
 } as const;
 
-const CATEGORY_COPY = {
-  en: {
-    cnc: "Mechanical engineering",
-    aircraft: "Aeronautics",
-    so101: "Robotics",
-    gripper: "Robotic tooling",
-    wearable: "Embodied data",
-    car: "Electromechanical",
-    bomba: "Fluid systems",
-    harv: "Manufacturing software",
-  },
-  es: {
-    cnc: "Ingeniería mecánica",
-    aircraft: "Aeronáutica",
-    so101: "Robótica",
-    gripper: "Herramientas robóticas",
-    wearable: "Datos corporales",
-    car: "Electromecánica",
-    bomba: "Sistemas de fluidos",
-    harv: "Software de manufactura",
-  },
-} as const;
-
-const BAY_TITLE_COPY = {
-  en: {
-    cnc: "Custom CNC lathe",
-    aircraft: "RC aircraft",
-    so101: "SO-101 robotic arm",
-    gripper: "Interchangeable gripper",
-    wearable: "Wearable data collector",
-    car: "Brushless motor car",
-    bomba: "Centrifugal pump",
-    harv: "Harv manufacturing ERP",
-  },
-  es: {
-    cnc: "Torno CNC",
-    aircraft: "Avión RC",
-    so101: "Brazo robótico SO-101",
-    gripper: "Gripper intercambiable",
-    wearable: "Recolector de datos",
-    car: "Carro brushless",
-    bomba: "Bomba centrífuga",
-    harv: "Harv ERP de manufactura",
-  },
-} as const;
-
 export default function HangarScreen() {
   const { language, ui } = useLanguage();
   const [openKey, setOpenKey] = useState<string | null>(null);
@@ -84,12 +39,40 @@ export default function HangarScreen() {
       keys.map((key) => byKey.get(key)).filter((project) => project !== undefined),
     );
   }, [projects]);
+  const sectionCounts = useMemo(
+    () => ({
+      hardware: projects.filter((project) => project.section === "hardware").length,
+      software: projects.filter((project) => project.section === "software").length,
+    }),
+    [projects],
+  );
   const levelCopy = LEVEL_COPY[language];
-  const categoryCopy = CATEGORY_COPY[language];
-  const bayTitleCopy = BAY_TITLE_COPY[language];
-  const openProject = useCallback((key: string) => setOpenKey(key), []);
-  const closeProject = useCallback(() => setOpenKey(null), []);
+  const sectionHref = (id: string) => homeSectionPath(language, id, window.location.search);
+  const openProject = useCallback(
+    (key: string) => {
+      const selected = projects.find((project) => project.key === key);
+      if (!selected) return;
+      pushRoute(projectPath(language, selected.slug));
+      setOpenKey(key);
+    },
+    [language, projects],
+  );
+  const closeProject = useCallback(() => {
+    pushRoute(homePath(language));
+    setOpenKey(null);
+  }, [language]);
   const openProjectData = projects.find((project) => project.key === openKey);
+
+  useEffect(() => {
+    const syncProjectFromRoute = (): void => {
+      const slug = projectSlugFromPath();
+      setOpenKey(slug ? (projects.find((project) => project.slug === slug)?.key ?? null) : null);
+    };
+
+    syncProjectFromRoute();
+    window.addEventListener("popstate", syncProjectFromRoute);
+    return () => window.removeEventListener("popstate", syncProjectFromRoute);
+  }, [projects]);
 
   useEffect(() => {
     const levelElements = document.querySelectorAll<HTMLElement>(".hangar-level");
@@ -110,9 +93,51 @@ export default function HangarScreen() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const scrollToRouteHash = (): void => {
+      const id = window.location.hash.slice(1);
+      const scroller = document.querySelector<HTMLElement>(".hangar-page");
+      if (!scroller) return;
+
+      const root = document.documentElement;
+      const previousBehavior = scroller.style.scrollBehavior;
+      const previousSnapType = scroller.style.scrollSnapType;
+      const previousRootBehavior = root.style.scrollBehavior;
+      const previousRootSnapType = root.style.scrollSnapType;
+      scroller.style.scrollBehavior = "auto";
+      scroller.style.scrollSnapType = "none";
+      root.style.scrollBehavior = "auto";
+      root.style.scrollSnapType = "none";
+
+      if (!id) {
+        scroller.scrollTo({ behavior: "auto", top: 0 });
+        window.scrollTo({ behavior: "auto", top: 0 });
+      } else {
+        document.getElementById(id)?.scrollIntoView({ behavior: "auto", block: "start" });
+      }
+
+      requestAnimationFrame(() => {
+        scroller.style.scrollBehavior = previousBehavior;
+        scroller.style.scrollSnapType = previousSnapType;
+        root.style.scrollBehavior = previousRootBehavior;
+        root.style.scrollSnapType = previousRootSnapType;
+      });
+    };
+
+    const previousScrollRestoration = window.history.scrollRestoration;
+    window.history.scrollRestoration = "manual";
+    const initialScroll = window.setTimeout(scrollToRouteHash, 0);
+    window.addEventListener("hashchange", scrollToRouteHash);
+    return () => {
+      window.history.scrollRestoration = previousScrollRestoration;
+      window.clearTimeout(initialScroll);
+      window.removeEventListener("hashchange", scrollToRouteHash);
+    };
+  }, []);
+
   return (
     <main className="hangar-page">
-      <a className="hangar-skip-link" href="#hangar-level-01">
+      <a className="hangar-skip-link" href={sectionHref("hangar-level-01")}>
         {language === "es" ? "Saltar a los proyectos" : "Skip to projects"}
       </a>
       <section className={`hangar-showcase is-level-${activeLevel + 1}`} id="hangar-work">
@@ -132,16 +157,15 @@ export default function HangarScreen() {
         </div>
 
         <header className="hangar-header">
-          <a className="hangar-mark" href="#hangar-level-01" aria-label="Diego Bau">
+          <a className="hangar-mark" href={sectionHref("hangar-level-01")} aria-label="Diego Bau">
             DBS
           </a>
           <nav className="hangar-nav" aria-label={ui.primaryNavigation}>
-            <a className="is-active" href="#hangar-work">
+            <a className="is-active" href={sectionHref("hangar-work")}>
               {ui.work}
             </a>
-            <a href="#hangar-about">{ui.about}</a>
             <a href={portfolioPdf} target="_blank" rel="noopener noreferrer">
-              CV
+              {ui.portfolioNav}
             </a>
           </nav>
         </header>
@@ -154,7 +178,7 @@ export default function HangarScreen() {
             <a
               aria-current={activeLevel === index ? "step" : undefined}
               aria-label={`${language === "es" ? "Ir al nivel" : "Go to level"} ${index + 1}: ${copy.label}`}
-              href={`#hangar-level-0${index + 1}`}
+              href={sectionHref(`hangar-level-0${index + 1}`)}
               key={copy.label}
             >
               {String(index + 1).padStart(2, "0")}
@@ -169,8 +193,8 @@ export default function HangarScreen() {
             const visibleBayCount = levelProjects.length + (hasLoadingBay ? 1 : 0);
             const nextTarget =
               levelIndex < levels.length - 1
-                ? `#hangar-level-0${levelIndex + 2}`
-                : "#hangar-about";
+                ? `hangar-level-0${levelIndex + 2}`
+                : null;
             const levelId = `hangar-level-0${levelIndex + 1}`;
             const headingId = levelIndex === 0 ? "hangar-title" : `${levelId}-title`;
 
@@ -191,7 +215,24 @@ export default function HangarScreen() {
                         <strong>DIEGO</strong>
                         <span>Bautista Silva</span>
                       </h1>
-                      <p>{ui.tagline}</p>
+                      <p className="hangar-identity-tagline">{ui.tagline}</p>
+                      <nav
+                        aria-label={
+                          language === "es"
+                            ? "Categorías de proyectos"
+                            : "Project categories"
+                        }
+                        className="hangar-section-index"
+                      >
+                        <a href={sectionHref("project-cnc-lathe")}>
+                          <span>{ui.sections.hardware}</span>
+                          <strong>{String(sectionCounts.hardware).padStart(2, "0")}</strong>
+                        </a>
+                        <a href={sectionHref("project-harv")}>
+                          <span>{ui.sections.software}</span>
+                          <strong>{String(sectionCounts.software).padStart(2, "0")}</strong>
+                        </a>
+                      </nav>
                     </div>
                   ) : (
                     <div className="hangar-level-heading">
@@ -212,14 +253,8 @@ export default function HangarScreen() {
                   >
                     {levelProjects.map((project, projectIndex) => (
                       <HangarBay
-                        category={
-                          categoryCopy[project.key as keyof typeof categoryCopy] ??
-                          ui.sections.hardware
-                        }
-                        displayTitle={
-                          bayTitleCopy[project.key as keyof typeof bayTitleCopy] ??
-                          project.title
-                        }
+                        category={`${ui.sections[project.section]} · ${project.discipline}`}
+                        displayTitle={project.bayTitle}
                         key={project.key}
                         number={levelIndex * 3 + projectIndex + 1}
                         onOpen={openProject}
@@ -244,20 +279,17 @@ export default function HangarScreen() {
                     ) : null}
                   </div>
 
-                  <a className="hangar-scroll-cue" href={nextTarget}>
-                    <span>{ui.scrollToExplore}</span>
-                    <span aria-hidden="true">↓</span>
-                  </a>
+                  {nextTarget ? (
+                    <a className="hangar-scroll-cue" href={sectionHref(nextTarget)}>
+                      <span>{ui.scrollToExplore}</span>
+                      <span aria-hidden="true">↓</span>
+                    </a>
+                  ) : null}
                 </div>
               </section>
             );
           })}
         </div>
-      </section>
-
-      <section className="hangar-about" id="hangar-about">
-        <p>{ui.hangarNextKicker}</p>
-        <h2>{ui.hangarNextTitle}</h2>
       </section>
 
       <ProjectDetail project={openProjectData} onClose={closeProject} />
