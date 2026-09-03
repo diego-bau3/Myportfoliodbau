@@ -3,5 +3,7 @@ dist/
 .env
 .DS_Store
 assets/*.png
+!assets/hangar-aircraft-detail-v1.png
+!assets/hangar-project-bay-v2.png
 
 /docs
