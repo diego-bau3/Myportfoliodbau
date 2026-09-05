@@ -7,18 +7,17 @@ export type StationPresentation = {
   maxHeight: number;
   contact: readonly [number, number];
   shadowWidth: number;
-  reflection: number;
 };
 
 export const STATION_PRESENTATIONS = {
-  cnc: { mode: "object", width: 1221, height: 644, maxWidth: .62, maxHeight: .48, contact: [.43, .99], shadowWidth: .72, reflection: .09 },
-  aircraft: { mode: "object", width: 830, height: 291, maxWidth: .80, maxHeight: .46, contact: [.30, .985], shadowWidth: .43, reflection: .07 },
-  so101: { mode: "object", width: 396, height: 683, maxWidth: .42, maxHeight: .49, contact: [.70, .99], shadowWidth: .48, reflection: .07 },
-  gripper: { mode: "object", width: 1008, height: 743, maxWidth: .66, maxHeight: .49, contact: [.13, .99], shadowWidth: .23, reflection: .045 },
-  wearable: { mode: "object", width: 615, height: 760, maxWidth: .48, maxHeight: .52, contact: [.16, .81], shadowWidth: .37, reflection: .025 },
-  car: { mode: "object", width: 760, height: 583, maxWidth: .60, maxHeight: .47, contact: [.49, .99], shadowWidth: .68, reflection: .065 },
-  bomba: { mode: "object", width: 408, height: 266, maxWidth: .60, maxHeight: .43, contact: [.50, .98], shadowWidth: .73, reflection: .055 },
-  harv: { mode: "software", width: 1265, height: 712, maxWidth: .80, maxHeight: .55, contact: [.50, 1], shadowWidth: .83, reflection: 0 },
+  cnc: { mode: "object", width: 639, height: 360, maxWidth: .62, maxHeight: .50, contact: [.43, .99], shadowWidth: .72 },
+  aircraft: { mode: "object", width: 900, height: 339, maxWidth: .80, maxHeight: .46, contact: [.30, .985], shadowWidth: .43 },
+  so101: { mode: "object", width: 605, height: 900, maxWidth: .42, maxHeight: .49, contact: [.70, .99], shadowWidth: .48 },
+  gripper: { mode: "object", width: 1200, height: 854, maxWidth: .66, maxHeight: .49, contact: [.13, .99], shadowWidth: .23 },
+  wearable: { mode: "object", width: 617, height: 760, maxWidth: .48, maxHeight: .52, contact: [.16, .81], shadowWidth: .37 },
+  car: { mode: "object", width: 760, height: 583, maxWidth: .60, maxHeight: .47, contact: [.49, .99], shadowWidth: .68 },
+  bomba: { mode: "object", width: 1448, height: 1086, maxWidth: .60, maxHeight: .43, contact: [.50, .98], shadowWidth: .73 },
+  harv: { mode: "software", width: 1265, height: 712, maxWidth: .80, maxHeight: .55, contact: [.50, 1], shadowWidth: .83 },
 } as const satisfies Record<string, StationPresentation>;
 
 export type StationKey = keyof typeof STATION_PRESENTATIONS;
@@ -40,7 +39,6 @@ export function stationLayout(width: number, height: number, fullHeight: number,
   return {
     photo: { width: 1672 * photoScale, height: 941 * photoScale, left: safeWidth / 2 - 838 * photoScale, top: floorY - 700 * photoScale },
     object: { width: objectWidth, height: objectHeight, left, top },
-    reflectionTop: contactY - objectHeight * (1 - preset.contact[1]),
     shadow: { left: left + objectWidth * preset.contact[0], top: contactY, width: objectWidth * preset.shadowWidth, height: Math.max(9, objectHeight * .055) },
     floorY,
     contactY,

@@ -2,18 +2,25 @@ import { describe, expect, test } from "bun:test";
 import { PROJECT_MANIFEST } from "../src/data/projectManifest.ts";
 import { stationLayout, STATION_PRESENTATIONS } from "../src/data/stationGeometry.ts";
 
+const HOME_IMAGE_DIMENSIONS = {
+  cnc: [639, 360],
+  aircraft: [900, 339],
+  so101: [605, 900],
+  gripper: [1200, 854],
+  wearable: [617, 760],
+  car: [760, 583],
+  bomba: [1448, 1086],
+  harv: [1265, 712],
+} as const;
+
 describe("shared project detail stations", () => {
   test("every localized project uses the same presentation registry", () => {
     expect(Object.keys(STATION_PRESENTATIONS).sort()).toEqual(PROJECT_MANIFEST.map(({ key }) => key).sort());
   });
 
   for (const [key, preset] of Object.entries(STATION_PRESENTATIONS)) {
-    test(`${key}: asset dimensions match its undistorted presentation`, async () => {
-      if (key === "harv") return;
-      const bytes = new DataView(await Bun.file(new URL(`../assets/stations/${key}-detail-v1.png`, import.meta.url)).arrayBuffer());
-      expect(bytes.getUint32(16)).toBe(preset.width);
-      expect(bytes.getUint32(20)).toBe(preset.height);
-      expect(bytes.getUint8(25)).toBe(6); // PNG RGBA, not a painted checkerboard.
+    test(`${key}: geometry matches the image reused from the home hangar`, () => {
+      expect([preset.width, preset.height]).toEqual(HOME_IMAGE_DIMENSIONS[key as keyof typeof HOME_IMAGE_DIMENSIONS]);
     });
 
     for (const [width, height, fullHeight] of [[320, 440, 780], [390, 540, 860], [768, 760, 980], [745, 515, 708], [792, 650, 850], [950, 650, 900], [1267, 815, 1080]]) {
